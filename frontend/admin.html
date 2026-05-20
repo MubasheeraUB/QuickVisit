@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - QuickVisit</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/admin.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="logo">
+    <div class="logo-icon">QV</div>
+    <span>QuickVisit Admin</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <span id="admin-name">Welcome, Admin</span>
+    <a href="#" onclick="logout(); return false;">Logout</a>
+  </div>
+</nav>
+
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="admin-user">
+        <div class="avatar">M</div>
+        <div class="user-info">
+          <div style="font-weight: 600;">Mubasheera U B</div>
+          <small>System Administrator</small>
+        </div>
+      </div>
+    </div>
+    <ul class="sidebar-menu">
+      <li class="active" data-section="dashboard"><span class="menu-icon">DB</span> Dashboard</li>
+      <li data-section="destinations"><span class="menu-icon">DT</span> Destinations</li>
+      <li data-section="bookings"><span class="menu-icon">BK</span> Bookings</li>
+      <li data-section="users"><span class="menu-icon">US</span> Users</li>
+      <li data-section="payments"><span class="menu-icon">PY</span> Payments</li>
+      <li data-section="qrcodes"><span class="menu-icon">QR</span> QR Codes</li>
+      <li data-section="feedback"><span class="menu-icon">FB</span> Feedback</li>
+      <li data-section="reports"><span class="menu-icon">RP</span> Reports</li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- DASHBOARD -->
+    <section id="section-dashboard" class="admin-section active">
+      <h1 class="page-title">Dashboard Overview</h1>
+      <p class="page-subtitle">Welcome back! Here's what's happening across QuickVisit today.</p>
+
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card">
+          <div class="stat-info">
+            <h3>Today's Bookings</h3>
+            <div class="stat-value" id="stat-bookings">--</div>
+            <div class="stat-change up">+12.5% from yesterday</div>
+          </div>
+          <div class="stat-icon icon-blue">BK</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <h3>Revenue Today</h3>
+            <div class="stat-value" id="stat-revenue">--</div>
+            <div class="stat-change up">+18.2% from yesterday</div>
+          </div>
+          <div class="stat-icon icon-green">RV</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <h3>Active Destinations</h3>
+            <div class="stat-value" id="stat-destinations">--</div>
+            <div class="stat-change up">+2 this month</div>
+          </div>
+          <div class="stat-icon icon-orange">DT</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <h3>Registered Users</h3>
+            <div class="stat-value" id="stat-users">--</div>
+            <div class="stat-change up">+342 this week</div>
+          </div>
+          <div class="stat-icon icon-purple">US</div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>Bookings Trend (Last 7 Days)</h3>
+          <div class="chart-container"><canvas id="bookingsChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>Revenue by Destination</h3>
+          <div class="chart-container"><canvas id="revenueChart"></canvas></div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Recent Bookings</h3>
+          <button class="header-btn" onclick="switchSection('bookings')">View All</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Booking ID</th><th>Customer</th><th>Destination</th><th>Visitors</th><th>Amount</th><th>Status</th><th>Date</th></tr>
+          </thead>
+          <tbody id="recent-bookings-body">
+            <tr><td colspan="7" style="text-align: center; color: #999;">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- DESTINATIONS -->
+    <section id="section-destinations" class="admin-section">
+      <div class="table-header">
+        <div>
+          <h1 class="page-title">Tourist Destinations</h1>
+          <p class="page-subtitle">Manage all registered tourist destinations</p>
+        </div>
+        <button class="header-btn" onclick="alert('Add destination form (demo)')">+ Add Destination</button>
+      </div>
+      <div class="dest-grid" id="dest-grid"></div>
+    </section>
+
+    <!-- BOOKINGS -->
+    <section id="section-bookings" class="admin-section">
+      <h1 class="page-title">All Bookings</h1>
+      <p class="page-subtitle">View and manage all ticket bookings</p>
+
+      <div class="table-card">
+        <div class="table-header">
+          <input type="text" class="search-box" placeholder="Search by ID, name, or destination..." id="bookings-search">
+          <button class="header-btn">Export CSV</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Booking ID</th><th>Customer</th><th>Destination</th><th>Visitors</th><th>Amount</th><th>Payment</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="bookings-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- USERS -->
+    <section id="section-users" class="admin-section">
+      <h1 class="page-title">Registered Users</h1>
+      <p class="page-subtitle">Manage user accounts and view activity</p>
+
+      <div class="table-card">
+        <div class="table-header">
+          <input type="text" class="search-box" placeholder="Search users...">
+          <button class="header-btn">Export</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Bookings</th><th>Joined</th><th>Status</th></tr>
+          </thead>
+          <tbody id="users-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PAYMENTS -->
+    <section id="section-payments" class="admin-section">
+      <h1 class="page-title">Payment Transactions</h1>
+      <p class="page-subtitle">Track all payment transactions and refunds</p>
+
+      <div class="table-card">
+        <h3 style="margin-bottom: 15px;">Recent Transactions</h3>
+        <table>
+          <thead>
+            <tr><th>Transaction ID</th><th>Booking</th><th>Method</th><th>Amount</th><th>Status</th><th>Date</th></tr>
+          </thead>
+          <tbody id="payments-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- QR CODES -->
+    <section id="section-qrcodes" class="admin-section">
+      <h1 class="page-title">QR Code Management</h1>
+      <p class="page-subtitle">Generate and download QR codes for tourist destinations</p>
+
+      <div class="table-card">
+        <h3 style="margin-bottom: 15px;">Generate New QR Code</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div class="form-group">
+            <label>Select Destination</label>
+            <select id="qr-dest"></select>
+          </div>
+          <div class="form-group">
+            <label>QR Code Type</label>
+            <select>
+              <option>Entrance QR (Standard)</option>
+              <option>Group Booking QR</option>
+              <option>Promotional QR</option>
+            </select>
+          </div>
+        </div>
+        <button class="header-btn" onclick="generateAdminQR()">Generate QR Code</button>
+        <div id="qr-print-area" class="qr-print-area" style="display: none;">
+          <div id="generated-qr"></div>
+          <p style="margin-top: 10px; font-weight: 600;" id="qr-dest-name"></p>
+          <button class="action-btn btn-view">Download PNG</button>
+          <button class="action-btn btn-edit">Print</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEEDBACK -->
+    <section id="section-feedback" class="admin-section">
+      <h1 class="page-title">User Feedback</h1>
+      <p class="page-subtitle">Reviews and feedback from tourists</p>
+
+      <div class="table-card" id="feedback-list">
+        <p style="color: #999;">Loading feedback...</p>
+      </div>
+    </section>
+
+    <!-- REPORTS -->
+    <section id="section-reports" class="admin-section">
+      <h1 class="page-title">Reports & Analytics</h1>
+      <p class="page-subtitle">Detailed performance insights and data exports</p>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>Monthly Bookings (2026)</h3>
+          <div class="chart-container"><canvas id="monthlyChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>Visitor Categories</h3>
+          <div class="chart-container"><canvas id="categoryChart"></canvas></div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Available Reports</h3>
+          <button class="header-btn">Custom Report</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Report Name</th><th>Type</th><th>Frequency</th><th>Last Generated</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Daily Booking Summary</td><td>Operational</td><td>Daily</td><td>Today</td><td><button class="action-btn btn-view">Download</button></td></tr>
+            <tr><td>Monthly Revenue Report</td><td>Financial</td><td>Monthly</td><td>30 Apr 2026</td><td><button class="action-btn btn-view">Download</button></td></tr>
+            <tr><td>Destination Performance</td><td>Analytics</td><td>Weekly</td><td>12 May 2026</td><td><button class="action-btn btn-view">Download</button></td></tr>
+            <tr><td>User Activity Report</td><td>Behavioral</td><td>Monthly</td><td>30 Apr 2026</td><td><button class="action-btn btn-view">Download</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- QR Modal -->
+<div class="modal-overlay" id="qrModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="qrModalTitle">QR Code</h3>
+      <button class="modal-close" onclick="closeQRModal()">x</button>
+    </div>
+    <div style="text-align: center;">
+      <div id="modalQR" style="display: flex; justify-content: center; padding: 20px;"></div>
+      <p style="margin-bottom: 15px;">Place this QR at the entrance of <strong id="modalDestName"></strong></p>
+      <button class="header-btn">Download PNG</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/admin.js"></script>
+
+</body>
+</html>
