@@ -1,0 +1,512 @@
+
+<div class="modal-overlay" id="addDestModal" onclick="handleAddDestOverlayClick(event)">
+  <div class="modal add-dest-modal">
+
+    <!-- Header -->
+    <div class="add-dest-header">
+      <div class="add-dest-header-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+        </svg>
+      </div>
+      <div>
+        <h3>Add New Destination</h3>
+        <p>Register a tourist destination on QuickVisit</p>
+      </div>
+      <button class="add-dest-close" onclick="closeAddDestModal()" title="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Alert -->
+    <div id="dest-form-alert" class="dest-alert" style="display:none;"></div>
+
+    <!-- Body -->
+    <div class="add-dest-body">
+      <form id="addDestForm" onsubmit="return false;" novalidate>
+
+        <!-- Section: Basic Info -->
+        <div class="dest-form-section">
+          <div class="dest-section-label">
+            <span class="dest-section-dot"></span> Basic Information
+          </div>
+          <div class="dest-form-grid dest-grid-2">
+            <div class="dest-field">
+              <label for="df-name">Destination Name <span class="dest-required">*</span></label>
+              <input type="text" id="df-name" placeholder="e.g. Taj Mahal" autocomplete="off" required>
+            </div>
+            <div class="dest-field">
+              <label for="df-location">Location <span class="dest-required">*</span></label>
+              <input type="text" id="df-location" placeholder="e.g. Agra, Uttar Pradesh" autocomplete="off" required>
+            </div>
+          </div>
+          <div class="dest-field">
+            <label for="df-description">Description <span class="dest-optional">(optional)</span></label>
+            <textarea id="df-description" rows="3" placeholder="Describe the destination — its history, highlights, and what visitors can expect…"></textarea>
+          </div>
+          <div class="dest-field">
+            <label for="df-image-url">Image URL <span class="dest-optional">(optional)</span></label>
+            <input type="url" id="df-image-url" placeholder="https://example.com/photo.jpg">
+          </div>
+        </div>
+
+        <!-- Section: Pricing -->
+        <div class="dest-form-section">
+          <div class="dest-section-label">
+            <span class="dest-section-dot dest-dot-green"></span> Ticket Pricing
+          </div>
+          <div class="dest-form-grid dest-grid-3">
+            <div class="dest-field">
+              <label for="df-adult-price">Adult (18+)</label>
+              <div class="dest-input-prefix">
+                <span>₹</span>
+                <input type="number" id="df-adult-price" value="50" min="0" step="5">
+              </div>
+            </div>
+            <div class="dest-field">
+              <label for="df-child-price">Child <span class="dest-optional">(5–12 yrs)</span></label>
+              <div class="dest-input-prefix">
+                <span>₹</span>
+                <input type="number" id="df-child-price" value="25" min="0" step="5">
+              </div>
+            </div>
+            <div class="dest-field">
+              <label for="df-senior-price">Senior Citizen</label>
+              <div class="dest-input-prefix">
+                <span>₹</span>
+                <input type="number" id="df-senior-price" value="30" min="0" step="5">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Hours & Capacity -->
+        <div class="dest-form-section" style="border-bottom:none;padding-bottom:0;">
+          <div class="dest-section-label">
+            <span class="dest-section-dot dest-dot-orange"></span> Hours &amp; Capacity
+          </div>
+          <div class="dest-form-grid dest-grid-3">
+            <div class="dest-field">
+              <label for="df-opening">Opening Time</label>
+              <input type="time" id="df-opening" value="09:00">
+            </div>
+            <div class="dest-field">
+              <label for="df-closing">Closing Time</label>
+              <input type="time" id="df-closing" value="18:00">
+            </div>
+            <div class="dest-field">
+              <label for="df-capacity">Daily Capacity</label>
+              <input type="number" id="df-capacity" value="5000" min="100" step="100">
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="add-dest-footer">
+      <button class="dest-btn-cancel" onclick="closeAddDestModal()">Cancel</button>
+      <button class="dest-btn-save" id="dest-save-btn" onclick="submitAddDestination()">
+        <svg id="dest-save-spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:none;animation:spin .7s linear infinite;">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+        </svg>
+        <span id="dest-save-text">Add Destination</span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)  scale(1); }
+}
+
+/* Modal Overlay */
+.modal-overlay#addDestModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 20, 40, 0.55);
+  backdrop-filter: blur(3px);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay#addDestModal.show {
+  display: flex;
+}
+
+/* Modal Card */
+.add-dest-modal {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 660px;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+  animation: slideUp 0.28s cubic-bezier(0.34,1.2,0.64,1);
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Header */
+.add-dest-header {
+  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+  color: white;
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+.add-dest-header-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.18);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.add-dest-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 3px;
+  letter-spacing: -0.2px;
+}
+.add-dest-header p {
+  font-size: 13px;
+  opacity: 0.82;
+  margin: 0;
+}
+.add-dest-close {
+  margin-left: auto;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.add-dest-close:hover { background: rgba(255,255,255,0.28); }
+
+/* Alert banner */
+.dest-alert {
+  margin: 0;
+  padding: 12px 24px;
+  font-size: 14px;
+  border-left: 4px solid transparent;
+  flex-shrink: 0;
+}
+.dest-alert.alert-success {
+  background: #e8f5e9;
+  color: #1b5e20;
+  border-left-color: #4caf50;
+}
+.dest-alert.alert-error {
+  background: #fff3f3;
+  color: #b71c1c;
+  border-left-color: #e53935;
+}
+
+/* Body */
+.add-dest-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 0;
+}
+.add-dest-body::-webkit-scrollbar { width: 6px; }
+.add-dest-body::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+
+/* Sections */
+.dest-form-section {
+  padding: 18px 24px 18px;
+  border-bottom: 1px solid #f0f2f5;
+}
+.dest-section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #9aa0ad;
+  margin-bottom: 14px;
+}
+.dest-section-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1e88e5;
+  flex-shrink: 0;
+}
+.dest-section-dot.dest-dot-green  { background: #4caf50; }
+.dest-section-dot.dest-dot-orange { background: #ff9800; }
+
+/* Field */
+.dest-field {
+  margin-bottom: 14px;
+}
+.dest-field:last-child { margin-bottom: 0; }
+.dest-field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3d4552;
+  margin-bottom: 6px;
+}
+.dest-required { color: #e53935; margin-left: 2px; }
+.dest-optional { font-weight: 400; color: #b0b8c4; font-size: 12px; }
+
+.dest-field input,
+.dest-field select,
+.dest-field textarea {
+  width: 100%;
+  padding: 10px 13px;
+  border: 1.5px solid #e2e6ea;
+  border-radius: 9px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #2c3e50;
+  background: #fafbfc;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.dest-field textarea { resize: vertical; min-height: 80px; }
+.dest-field input:focus,
+.dest-field textarea:focus {
+  border-color: #1e88e5;
+  box-shadow: 0 0 0 3px rgba(30,136,229,0.12);
+  background: #fff;
+}
+.dest-field input.invalid {
+  border-color: #e53935;
+  box-shadow: 0 0 0 3px rgba(229,57,53,0.1);
+}
+
+/* Prefix input (₹ symbol) */
+.dest-input-prefix {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #e2e6ea;
+  border-radius: 9px;
+  background: #fafbfc;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.dest-input-prefix:focus-within {
+  border-color: #1e88e5;
+  box-shadow: 0 0 0 3px rgba(30,136,229,0.12);
+  background: #fff;
+}
+.dest-input-prefix span {
+  padding: 0 10px 0 13px;
+  color: #7f8c8d;
+  font-size: 14px;
+  font-weight: 600;
+  user-select: none;
+}
+.dest-input-prefix input {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding-left: 0;
+  border-radius: 0;
+}
+
+/* Grids */
+.dest-form-grid { display: grid; gap: 14px; }
+.dest-grid-2    { grid-template-columns: 1fr 1fr; }
+.dest-grid-3    { grid-template-columns: 1fr 1fr 1fr; }
+
+/* Footer */
+.add-dest-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid #f0f2f5;
+  background: #fafbfc;
+  flex-shrink: 0;
+}
+.dest-btn-cancel {
+  padding: 10px 22px;
+  background: #fff;
+  color: #555;
+  border: 1.5px solid #dde1e7;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.dest-btn-cancel:hover { background: #f4f6f8; border-color: #c8cdd4; }
+
+.dest-btn-save {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 26px;
+  background: linear-gradient(135deg, #1e88e5, #1565c0);
+  color: white;
+  border: none;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  box-shadow: 0 4px 14px rgba(30,136,229,0.35);
+}
+.dest-btn-save:hover:not(:disabled) { opacity: 0.92; transform: translateY(-1px); }
+.dest-btn-save:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+/* Responsive */
+@media (max-width: 560px) {
+  .dest-grid-2, .dest-grid-3 { grid-template-columns: 1fr; }
+  .add-dest-header { padding: 18px; gap: 12px; }
+  .add-dest-body, .dest-form-section { padding-left: 16px; padding-right: 16px; }
+  .add-dest-footer { padding: 14px 16px; }
+}
+</style>
+
+<script>
+// ─── Add Destination Modal ────────────────────────────────────────────────────
+
+function destinationAdd() {
+  document.getElementById('addDestModal').classList.add('show');
+  // Reset form each time it's opened
+  document.getElementById('addDestForm').reset();
+  hideDestFormAlert();
+  resetDestSaveBtn();
+  // Focus first field
+  setTimeout(() => {
+    const f = document.getElementById('df-name');
+    if (f) f.focus();
+  }, 120);
+}
+
+function closeAddDestModal() {
+  document.getElementById('addDestModal').classList.remove('show');
+  document.getElementById('addDestForm').reset();
+  hideDestFormAlert();
+  resetDestSaveBtn();
+  // Clear validation highlights
+  document.querySelectorAll('#addDestForm .invalid').forEach(el => el.classList.remove('invalid'));
+}
+
+function handleAddDestOverlayClick(e) {
+  if (e.target === document.getElementById('addDestModal')) closeAddDestModal();
+}
+
+function showDestFormAlert(msg, type) {
+  const el = document.getElementById('dest-form-alert');
+  if (!el) return;
+  el.textContent = msg;
+  el.className   = 'dest-alert alert-' + (type === 'success' ? 'success' : 'error');
+  el.style.display = 'block';
+}
+
+function hideDestFormAlert() {
+  const el = document.getElementById('dest-form-alert');
+  if (el) { el.style.display = 'none'; el.textContent = ''; }
+}
+
+function resetDestSaveBtn() {
+  const btn     = document.getElementById('dest-save-btn');
+  const spinner = document.getElementById('dest-save-spinner');
+  const text    = document.getElementById('dest-save-text');
+  if (btn)     btn.disabled = false;
+  if (spinner) spinner.style.display = 'none';
+  if (text)    text.textContent = 'Add Destination';
+}
+
+function setDestSaveBtnLoading(loading) {
+  const btn     = document.getElementById('dest-save-btn');
+  const spinner = document.getElementById('dest-save-spinner');
+  const text    = document.getElementById('dest-save-text');
+  if (!btn) return;
+  btn.disabled          = loading;
+  if (spinner) spinner.style.display = loading ? 'inline-block' : 'none';
+  if (text)    text.textContent      = loading ? 'Saving…' : 'Add Destination';
+}
+
+async function submitAddDestination() {
+  hideDestFormAlert();
+
+  // ── Validate required fields ──
+  const nameInput     = document.getElementById('df-name');
+  const locationInput = document.getElementById('df-location');
+  const name          = nameInput.value.trim();
+  const location      = locationInput.value.trim();
+
+  [nameInput, locationInput].forEach(el => el.classList.remove('invalid'));
+
+  let valid = true;
+  if (!name)     { nameInput.classList.add('invalid');     nameInput.focus();     valid = false; }
+  if (!location) { locationInput.classList.add('invalid'); if (valid) locationInput.focus(); valid = false; }
+
+  if (!valid) {
+    showDestFormAlert('Please fill in the required fields (marked with *).', 'error');
+    return;
+  }
+
+  setDestSaveBtnLoading(true);
+
+  const payload = {
+    name,
+    location,
+    description:   document.getElementById('df-description').value.trim()   || null,
+    image_url:     document.getElementById('df-image-url').value.trim()      || null,
+    adult_price:   parseFloat(document.getElementById('df-adult-price').value)  || 50,
+    child_price:   parseFloat(document.getElementById('df-child-price').value)  || 25,
+    senior_price:  parseFloat(document.getElementById('df-senior-price').value) || 30,
+    opening_time:  document.getElementById('df-opening').value  || '09:00',
+    closing_time:  document.getElementById('df-closing').value  || '18:00',
+    daily_capacity: parseInt(document.getElementById('df-capacity').value)   || 5000
+  };
+
+  try {
+    await api.destinations.create(payload);
+    showDestFormAlert('✓ Destination "' + name + '" added successfully!', 'success');
+    setTimeout(() => {
+      closeAddDestModal();
+      // Refresh the destinations grid if it's visible
+      if (typeof loadDestinations === 'function') loadDestinations();
+    }, 1400);
+  } catch (err) {
+
+   console.error('CREATE DESTINATION ERROR:', err);
+
+   res.status(500).json({
+      error: err.message || 'Failed to create destination'
+   });
+
+}
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('addDestModal');
+    if (modal && modal.classList.contains('show')) closeAddDestModal();
+  }
+});
+</script>

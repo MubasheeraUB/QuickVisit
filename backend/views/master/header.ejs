@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/QV-logo.png">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <% if (typeof extraCSS !== 'undefined') { extraCSS.forEach(function(css) { %>
+  <link rel="stylesheet" href="<%= css %>">
+  <% }); } %>
+
+  <% if (typeof headScripts !== 'undefined') { headScripts.forEach(function(src) { %>
+  <script src="<%= src %>"></script>
+  <% }); } %>
+</head>
+
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-icon">QV</div>
+    <span><%= typeof navBrand !== 'undefined' ? navBrand : 'QuickVisit' %></span>
+  </a>
+
+  <div class="nav-links">
+    <% if (typeof navType !== 'undefined' && navType === 'admin') { %>
+      <a href="/">Home</a>
+      <span id="admin-name">Welcome, Admin</span>
+      <a href="#" onclick="logout(); return false;">Logout</a>
+    <% } else if (typeof navType !== 'undefined' && navType === 'login') { %>
+      <a href="/">Home</a>
+      <a href="/tourist">Book Tickets</a>
+    <% } else if (typeof navType !== 'undefined' && navType === 'tourist') { %>
+      <a href="/">Home</a>
+      <a href="/login" id="loginLink">Login</a>
+    <% } else { %>
+      <a href="/tourist">Book Tickets</a>
+      <a href="/login">Login</a>
+      <a href="/admin">Admin</a>
+    <% } %>
+  </div>
+</nav>

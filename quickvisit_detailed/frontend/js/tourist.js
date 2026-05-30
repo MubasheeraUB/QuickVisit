@@ -8,7 +8,7 @@ let currentPaymentMethod = 'UPI';
 let currentBooking = null;
 
 // Default destination ID for demo (Taj Mahal)
-const DEMO_DEST_ID = 1;
+const DEMO_DEST_ID = 3;
 
 // ===== Step Navigation =====
 function goToStep(step) {

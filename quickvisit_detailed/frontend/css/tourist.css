@@ -1,0 +1,201 @@
+/* ============== Tourist Booking Flow Styles ============== */
+.tourist-container {
+  max-width: 480px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.phone-frame {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  min-height: 600px;
+}
+
+.phone-header {
+  background: linear-gradient(135deg, #1e88e5, #1565c0);
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.phone-content { padding: 25px; }
+
+.step { display: none; animation: fadeIn 0.4s; }
+.step.active { display: block; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* QR Scanner */
+.qr-scanner {
+  width: 220px;
+  height: 220px;
+  margin: 30px auto;
+  border: 4px dashed #1e88e5;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f8ff;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.qr-scanner:hover { background: #e3f2fd; }
+
+.scan-line {
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #1e88e5, transparent);
+  animation: scan 2s infinite;
+}
+@keyframes scan {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+/* Destination image */
+.destination-img {
+  width: 100%;
+  height: 180px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 60px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Info rows */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+.info-row:last-child { border-bottom: none; }
+.info-label { color: #666; font-size: 14px; }
+.info-value { font-weight: 600; color: #2c3e50; font-size: 14px; }
+
+/* Visitor counter */
+.visitor-counter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin: 8px 0;
+}
+.counter-controls { display: flex; align-items: center; gap: 12px; }
+.counter-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #1e88e5;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}
+.counter-btn:disabled { background: #ccc; cursor: not-allowed; }
+.counter-value { font-weight: bold; min-width: 25px; text-align: center; }
+
+/* Total section */
+.total-section {
+  background: linear-gradient(135deg, #1e88e5, #1565c0);
+  color: white;
+  padding: 18px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+.total-amount {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Buttons inside phone frame */
+.phone-content .btn-primary {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+.phone-content .btn-secondary {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+/* Payment methods */
+.payment-methods {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 15px 0;
+}
+.payment-method {
+  padding: 15px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.payment-method.selected {
+  border-color: #1e88e5;
+  background: #e3f2fd;
+}
+.payment-icon {
+  font-size: 18px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #1565c0;
+}
+
+/* Ticket card */
+.ticket-card {
+  background: white;
+  border: 2px dashed #1e88e5;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 15px 0;
+  text-align: center;
+}
+.ticket-success {
+  color: #4caf50;
+  font-size: 48px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.qr-output {
+  margin: 15px auto;
+  display: flex;
+  justify-content: center;
+}
+.ticket-id {
+  background: #f8f9fa;
+  padding: 8px;
+  border-radius: 6px;
+  font-family: monospace;
+  margin: 10px 0;
+  font-size: 14px;
+}

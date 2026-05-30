@@ -343,6 +343,42 @@ function initReportCharts() {
   });
 }
 
+// ===== Process Payment =====
+async function destinationAdd() {
+  
+  const visitDate = document.getElementById('visit-date').value;
+  const timeSlot = document.getElementById('time-slot').value;
+
+  try {
+    // Step 1: Create booking
+    const bookingData = {
+      destination_id: currentDestination ? currentDestination.id : DEMO_DEST_ID,
+      adult_count: counts.adult,
+      child_count: counts.child,
+      senior_count: counts.senior,
+      visit_date: visitDate,
+      time_slot: timeSlot
+    };
+
+    const bookingResult = await api.bookings.create(bookingData);
+    currentBooking = bookingResult.booking;
+
+    // Step 2: Process payment
+    await api.payments.process({
+      booking_id: currentBooking.booking_id,
+      payment_method: currentPaymentMethod,
+      payment_gateway: 'TestGateway'
+    });
+
+    // Show ticket
+    showTicket(currentBooking, bookingResult.qr_image);
+  } catch (err) {
+    console.warn('Backend unavailable, using demo mode:', err.message);
+    // Demo mode - generate offline ticket
+    showDemoTicket(visitDate, timeSlot);
+  }
+}
+
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', () => {
   // Show name from logged-in user if available

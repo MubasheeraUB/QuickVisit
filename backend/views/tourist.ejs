@@ -1,0 +1,184 @@
+<%- include("master/header") %>
+
+<div class="tourist-container">
+  <div class="phone-frame">
+    <div class="phone-header">
+      <h2>QuickVisit</h2>
+      <p style="font-size: 13px; opacity: 0.9;">Seamless Tourist Ticketing</p>
+    </div>
+
+    <div class="phone-content">
+
+      <!-- STEP 1: QR SCAN -->
+      <div id="step-scan" class="step active">
+        <h3 style="text-align: center; margin-bottom: 5px;">Scan QR Code</h3>
+        <p style="text-align: center; color: #666; font-size: 13px;">Point your camera at the QR code at the entrance</p>
+        <div class="qr-scanner" onclick="simulateScan()">
+          <div class="scan-line"></div>
+          <div style="text-align: center;">
+            <div style="font-size: 50px; font-weight: bold; color: #1e88e5;">QR</div>
+            <p style="margin-top: 10px; color: #1e88e5; font-weight: 600;">Tap to Simulate Scan</p>
+          </div>
+        </div>
+        <p style="text-align: center; font-size: 12px; color: #999;">No app installation required</p>
+      </div>
+
+      <!-- STEP 2: DESTINATION INFO -->
+      <div id="step-destination" class="step">
+        <div class="destination-img" id="dest-image">TM</div>
+        <h3 id="dest-name">Loading...</h3>
+        <p id="dest-description" style="color: #666; font-size: 13px; margin: 8px 0;">Loading...</p>
+
+        <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin: 15px 0;">
+          <div class="info-row"><span class="info-label">Open Today</span><span class="info-value" id="dest-hours">--</span></div>
+          <div class="info-row"><span class="info-label">Rating</span><span class="info-value" id="dest-rating">--</span></div>
+          <div class="info-row"><span class="info-label">Current Capacity</span><span class="info-value" id="dest-capacity" style="color: #ff9800;">--</span></div>
+          <div class="info-row"><span class="info-label">Adult Ticket</span><span class="info-value" id="dest-price">--</span></div>
+        </div>
+
+        <button class="btn-primary" onclick="goToStep('booking')">Book Tickets</button>
+      </div>
+
+      <!-- STEP 3: BOOKING -->
+      <div id="step-booking" class="step">
+        <h3>Select Visitors</h3>
+        <p style="color: #666; font-size: 13px;">Choose the number of tickets</p>
+
+        <div class="visitor-counter">
+          <div>
+            <div style="font-weight: 600;">Adult</div>
+            <small style="color: #666;" id="adult-price-label">Rs. 50 per person</small>
+          </div>
+          <div class="counter-controls">
+            <button class="counter-btn" onclick="updateCount('adult', -1)">-</button>
+            <span class="counter-value" id="adult-count">2</span>
+            <button class="counter-btn" onclick="updateCount('adult', 1)">+</button>
+          </div>
+        </div>
+
+        <div class="visitor-counter">
+          <div>
+            <div style="font-weight: 600;">Child (5-12 yrs)</div>
+            <small style="color: #666;" id="child-price-label">Rs. 25 per person</small>
+          </div>
+          <div class="counter-controls">
+            <button class="counter-btn" onclick="updateCount('child', -1)">-</button>
+            <span class="counter-value" id="child-count">1</span>
+            <button class="counter-btn" onclick="updateCount('child', 1)">+</button>
+          </div>
+        </div>
+
+        <div class="visitor-counter">
+          <div>
+            <div style="font-weight: 600;">Senior Citizen</div>
+            <small style="color: #666;" id="senior-price-label">Rs. 30 per person</small>
+          </div>
+          <div class="counter-controls">
+            <button class="counter-btn" onclick="updateCount('senior', -1)">-</button>
+            <span class="counter-value" id="senior-count">0</span>
+            <button class="counter-btn" onclick="updateCount('senior', 1)">+</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Visit Date</label>
+          <input type="date" id="visit-date">
+        </div>
+
+        <div class="form-group">
+          <label>Time Slot</label>
+          <select id="time-slot">
+            <option>9:00 AM - 11:00 AM</option>
+            <option>11:00 AM - 1:00 PM</option>
+            <option>2:00 PM - 4:00 PM</option>
+            <option>4:00 PM - 6:00 PM</option>
+          </select>
+        </div>
+
+        <div class="total-section">
+          <div class="total-row"><span>Subtotal</span><span id="subtotal">Rs. --</span></div>
+          <div class="total-row"><span>Service Fee</span><span id="service-fee">Rs. 5</span></div>
+          <div class="total-row total-amount"><span>Total</span><span id="total">Rs. --</span></div>
+        </div>
+
+        <button class="btn-primary" onclick="goToStep('payment')">Proceed to Payment</button>
+        <button class="btn-secondary" onclick="goToStep('destination')">Go Back</button>
+      </div>
+
+      <!-- STEP 4: PAYMENT -->
+      <div id="step-payment" class="step">
+        <h3>Payment Method</h3>
+        <p style="color: #666; font-size: 13px;">Choose your preferred payment option</p>
+
+        <div class="payment-methods">
+          <div class="payment-method selected" data-method="UPI" onclick="selectPayment(this)">
+            <div class="payment-icon">UPI</div>
+            <div style="font-weight: 600;">UPI</div>
+          </div>
+          <div class="payment-method" data-method="Card" onclick="selectPayment(this)">
+            <div class="payment-icon">CARD</div>
+            <div style="font-weight: 600;">Card</div>
+          </div>
+          <div class="payment-method" data-method="NetBanking" onclick="selectPayment(this)">
+            <div class="payment-icon">NB</div>
+            <div style="font-weight: 600;">Net Banking</div>
+          </div>
+          <div class="payment-method" data-method="Wallet" onclick="selectPayment(this)">
+            <div class="payment-icon">W</div>
+            <div style="font-weight: 600;">Wallet</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>UPI ID / Account Details</label>
+          <input type="text" id="payment-id" placeholder="yourname@upi">
+        </div>
+
+        <div class="form-group">
+          <label>Email (for ticket delivery)</label>
+          <input type="email" id="payment-email" placeholder="you@example.com">
+        </div>
+
+        <div class="total-section">
+          <div class="total-row total-amount" style="border: none; padding: 0; margin: 0;">
+            <span>Amount to Pay</span><span id="pay-amount">Rs. --</span>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="processPayment()">Pay Now (Test Mode)</button>
+        <button class="btn-secondary" onclick="goToStep('booking')">Go Back</button>
+      </div>
+
+      <!-- STEP 5: SUCCESS / TICKET -->
+      <div id="step-ticket" class="step">
+        <div class="ticket-card">
+          <div class="ticket-success">OK</div>
+          <h3 style="color: #4caf50;">Booking Confirmed!</h3>
+          <p style="color: #666; font-size: 13px; margin: 10px 0;">Your digital ticket has been generated</p>
+
+          <div class="qr-output" id="ticket-qr"></div>
+
+          <div class="ticket-id" id="ticket-id">QV-XXXXXX</div>
+
+          <div style="text-align: left; background: #f8f9fa; padding: 12px; border-radius: 8px;">
+            <div class="info-row"><span class="info-label">Destination</span><span class="info-value" id="ticket-dest">--</span></div>
+            <div class="info-row"><span class="info-label">Date</span><span class="info-value" id="ticket-date">--</span></div>
+            <div class="info-row"><span class="info-label">Time Slot</span><span class="info-value" id="ticket-slot">--</span></div>
+            <div class="info-row"><span class="info-label">Visitors</span><span class="info-value" id="ticket-visitors">--</span></div>
+            <div class="info-row"><span class="info-label">Paid</span><span class="info-value" id="ticket-paid">--</span></div>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="downloadTicket()">Download Ticket</button>
+        <button class="btn-secondary" onclick="resetTourist()">Book Another</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/tourist.js"></script>
+
+<%- include("master/footer") %>
