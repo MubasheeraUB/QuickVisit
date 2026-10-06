@@ -322,15 +322,21 @@ async function populateQRDestinations() {
 function generateAdminQR() {
   var select = document.getElementById('qr-dest');
   var dest   = select.options[select.selectedIndex].text;
+  var destId = select.value;
   document.getElementById('qr-print-area').style.display = 'block';
   document.getElementById('qr-dest-name').textContent    = dest;
   var qrDiv = document.getElementById('generated-qr');
   qrDiv.innerHTML = '';
   qrDiv.style.cssText = 'display:flex;justify-content:center;';
   new QRCode(qrDiv, {
-    text: 'https://quickvisit.app/book/' + dest.replace(/\s+/g, '-').toLowerCase(),
+    text: bookingUrl(destId),
     width: 180, height: 180, colorDark: '#1565c0', colorLight: '#ffffff'
   });
+}
+
+// URL a visitor's phone opens when scanning a destination QR
+function bookingUrl(destId) {
+  return (window.QV_PUBLIC_URL || location.origin) + '/tourist?dest=' + encodeURIComponent(destId);
 }
 
 function showQRModal(destName, destId) {
@@ -339,7 +345,7 @@ function showQRModal(destName, destId) {
   var qrDiv = document.getElementById('modalQR');
   qrDiv.innerHTML = '';
   new QRCode(qrDiv, {
-    text: 'https://quickvisit.app/book/' + String(destId),
+    text: bookingUrl(destId),
     width: 200, height: 200, colorDark: '#1565c0', colorLight: '#ffffff'
   });
   document.getElementById('qrModal').classList.add('show');

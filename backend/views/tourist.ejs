@@ -13,14 +13,26 @@
       <div id="step-scan" class="step active">
         <h3 style="text-align: center; margin-bottom: 5px;">Scan QR Code</h3>
         <p style="text-align: center; color: #666; font-size: 13px;">Point your camera at the QR code at the entrance</p>
-        <div class="qr-scanner" onclick="simulateScan()">
+
+        <div class="qr-scanner" id="qr-scanner-box" onclick="startScanner()">
           <div class="scan-line"></div>
-          <div style="text-align: center;">
+          <div id="scanner-placeholder" style="text-align: center;">
             <div style="font-size: 50px; font-weight: bold; color: #1e88e5;">QR</div>
-            <p style="margin-top: 10px; color: #1e88e5; font-weight: 600;">Tap to Simulate Scan</p>
+            <p style="margin-top: 10px; color: #1e88e5; font-weight: 600;">Tap to Scan</p>
           </div>
+          <div id="qr-reader"></div>
         </div>
-        <p style="text-align: center; font-size: 12px; color: #999;">No app installation required</p>
+
+        <p id="scan-status" class="scan-status"></p>
+
+        <button class="btn-secondary" id="stop-scan-btn" style="display: none;" onclick="stopScanner()">Stop Camera</button>
+
+        <label class="btn-secondary scan-upload">
+          Take / Upload QR Photo
+          <input type="file" accept="image/*" capture="environment" id="qr-file" onchange="scanFromFile(this)" hidden>
+        </label>
+
+        <p style="text-align: center; font-size: 12px; color: #999; margin-top: 10px;">No app installation required</p>
       </div>
 
       <!-- STEP 2: DESTINATION INFO -->
@@ -177,8 +189,10 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="/js/api.js"></script>
 <script src="/js/auth.js"></script>
-<script src="/js/tourist.js"></script>
+<script src="/js/tourist.js?v=<%= Date.now() %>"></script>
 
 <%- include("master/footer") %>

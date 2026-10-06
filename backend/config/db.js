@@ -1,7 +1,17 @@
 // PostgreSQL Database Connection Pool
 const { Pool } = require('pg');
 
-const pool = new Pool({
+// Hosted databases (Neon, Render, etc.) give one DATABASE_URL and need SSL.
+// Locally, the separate DB_* settings from .env are used.
+const pool = process.env.DATABASE_URL
+  ? new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+      max: 10,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 10000,
+    })
+  : new Pool({
   host: process.env.DB_HOST || 'localhost',
   port: process.env.DB_PORT || 5432,
   database: process.env.DB_NAME || 'quickvisit',

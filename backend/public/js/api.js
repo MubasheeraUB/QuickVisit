@@ -1,7 +1,7 @@
 // QuickVisit API Helper
 // Handles all communication with the backend
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = '/api'; // same origin as the page
 
 const api = {
   // Get auth token from local storage

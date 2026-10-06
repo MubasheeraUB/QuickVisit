@@ -46,7 +46,8 @@ exports.getQRCode = async (req, res) => {
     }
 
     const destination = result.rows[0];
-    const qrData = destination.qr_code_data || `https://quickvisit.app/book/${destination.id}`;
+    // QR opens the booking page for this destination on the visitor's phone
+    const qrData = `${req.app.get('publicUrl')}/tourist?dest=${destination.id}`;
     const qrImageDataUrl = await QRCode.toDataURL(qrData, {
       width: 300,
       color: { dark: '#1565c0', light: '#FFFFFF' }

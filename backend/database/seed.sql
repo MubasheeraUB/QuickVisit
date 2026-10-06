@@ -7,12 +7,12 @@
 -- USERS
 -- =============================================
 INSERT INTO users (name, email, password, phone, role) VALUES
-('Admin User', 'admin@quickvisit.com', '$2a$10$KQYXHHUVfqYJ3pPx0F3y7eRjmZ4Q9TtL5WnXKvNcRpZcGmLkPqJsK', '+91 9999999999', 'admin'),
-('Mubasheera U B', 'mubasheera2002@gmail.com', '$2a$10$YQ7XHHUVfqYJ3pPx0F3y7eRjmZ4Q9TtL5WnXKvNcRpZcGmLkPqJsK', '+91 7025014923', 'tourist'),
-('Rahul Sharma', 'rahul.sh@gmail.com', '$2a$10$YQ7XHHUVfqYJ3pPx0F3y7eRjmZ4Q9TtL5WnXKvNcRpZcGmLkPqJsK', '+91 9876543210', 'tourist'),
-('Priya Menon', 'priya.m@gmail.com', '$2a$10$YQ7XHHUVfqYJ3pPx0F3y7eRjmZ4Q9TtL5WnXKvNcRpZcGmLkPqJsK', '+91 9988776655', 'tourist'),
-('Ahmed Khan', 'ahmed.k@gmail.com', '$2a$10$YQ7XHHUVfqYJ3pPx0F3y7eRjmZ4Q9TtL5WnXKvNcRpZcGmLkPqJsK', '+91 9812345678', 'tourist'),
-('Sarah Joseph', 'sarah.j@gmail.com', '$2a$10$YQ7XHHUVfqYJ3pPx0F3y7eRjmZ4Q9TtL5WnXKvNcRpZcGmLkPqJsK', '+91 8877665544', 'tourist');
+('Admin User', 'admin@quickvisit.com', '$2a$10$vRgwdtUrI6.BALCqpahOwu7pMIk8TMC7CZA1GrElfVmwqSge/ClqO', '+91 9999999999', 'admin'),
+('Mubasheera U B', 'mubasheera2002@gmail.com', '$2a$10$rsOJQwHHQjs8JQmtDoclLOZGg8a1tXZBOEsPDKGtzx4V34lBZEHaO', '+91 7025014923', 'tourist'),
+('Rahul Sharma', 'rahul.sh@gmail.com', '$2a$10$rsOJQwHHQjs8JQmtDoclLOZGg8a1tXZBOEsPDKGtzx4V34lBZEHaO', '+91 9876543210', 'tourist'),
+('Priya Menon', 'priya.m@gmail.com', '$2a$10$rsOJQwHHQjs8JQmtDoclLOZGg8a1tXZBOEsPDKGtzx4V34lBZEHaO', '+91 9988776655', 'tourist'),
+('Ahmed Khan', 'ahmed.k@gmail.com', '$2a$10$rsOJQwHHQjs8JQmtDoclLOZGg8a1tXZBOEsPDKGtzx4V34lBZEHaO', '+91 9812345678', 'tourist'),
+('Sarah Joseph', 'sarah.j@gmail.com', '$2a$10$rsOJQwHHQjs8JQmtDoclLOZGg8a1tXZBOEsPDKGtzx4V34lBZEHaO', '+91 8877665544', 'tourist');
 
 -- =============================================
 -- DESTINATIONS

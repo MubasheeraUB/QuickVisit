@@ -17,6 +17,31 @@
   <% if (typeof headScripts !== 'undefined') { headScripts.forEach(function(src) { %>
   <script src="<%= src %>"></script>
   <% }); } %>
+  <script>
+    window.QV_PUBLIC_URL = '<%= typeof publicUrl !== 'undefined' ? publicUrl : '' %>' || location.origin;
+    window.QV_SECURE_URL = '<%= typeof secureUrl !== 'undefined' ? secureUrl : '' %>';
+  </script>
+
+  <% if (typeof guard !== 'undefined') { %>
+  <script>
+    // Role-based page guard (runs before the page renders)
+    (function () {
+      var guard = '<%= guard %>';
+      var token = localStorage.getItem('qv_token');
+      var user = null;
+      try { user = JSON.parse(localStorage.getItem('qv_user')); } catch (e) {}
+      var loggedIn = !!(token && user);
+
+      if (guard === 'guest') {
+        // Already logged in -> go to the right home for this role
+        if (loggedIn) location.replace(user.role === 'admin' ? '/admin' : '/tourist');
+      } else if (guard === 'admin') {
+        if (!loggedIn) location.replace('/login');
+        else if (user.role !== 'admin') location.replace('/tourist');
+      }
+    })();
+  </script>
+  <% } %>
 </head>
 
 <body>
@@ -40,8 +65,7 @@
       <a href="/login" id="loginLink">Login</a>
     <% } else { %>
       <a href="/tourist">Book Tickets</a>
-      <a href="/login">Login</a>
-      <a href="/admin">Admin</a>
+      <a href="/login" id="loginLink">Login</a>
     <% } %>
   </div>
 </nav>

@@ -199,3 +199,18 @@
   margin: 10px 0;
   font-size: 14px;
 }
+
+
+/* Real QR scanner */
+.qr-scanner { position: relative; overflow: hidden; }
+.qr-scanner.scanning { border-style: solid; cursor: default; background: #000; }
+.qr-scanner.scanning .scan-line { z-index: 2; }
+#qr-reader { position: absolute; inset: 0; display: none; }
+.qr-scanner.scanning #qr-reader { display: block; }
+.qr-scanner.scanning #scanner-placeholder { display: none; }
+#qr-reader video { width: 100% !important; height: 100% !important; object-fit: cover; }
+#qr-reader img, #qr-reader__dashboard, #qr-reader__header_message { display: none !important; }
+.scan-status { text-align: center; font-size: 13px; min-height: 18px; margin: -15px 0 12px; color: #666; }
+.scan-status.error { color: #d32f2f; }
+.scan-status a { color: #1e88e5; font-weight: 600; }
+.scan-upload { display: block; text-align: center; cursor: pointer; margin-top: 8px; }
